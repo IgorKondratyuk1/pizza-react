@@ -1,4 +1,18 @@
+import React, { useState } from 'react'
+import CategoryItem from './common/CategoryItem/CategoryItem';
+
 function Sort() {
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const popupList = ['популярности', 'цене', 'алфавиту'];
+    const sortName = popupList[activeIndex];
+
+    const onPopupItemClick = (index) => {
+        setActiveIndex(index);
+        setIsOpen(false);
+    }
+
     return (
         <div className="sort">
             <div className="sort__label">
@@ -15,15 +29,21 @@ function Sort() {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span>популярности</span>
+                <span onClick={() => { setIsOpen(!isOpen) }}>{sortName}</span>
             </div>
-            <div className="sort__popup">
-                <ul>
-                    <li className="active">популярности</li>
-                    <li>цене</li>
-                    <li>алфавиту</li>
-                </ul>
-            </div>
+            {
+                isOpen &&
+                <div className="sort__popup">
+                    <ul>
+                        {
+                            popupList.map((value, i) => {
+                                return <CategoryItem key={i} name={value} currentElemIndex={i} activeIndex={activeIndex} onItemChange={onPopupItemClick} />
+                            })
+                        }
+                    </ul>
+                </div>
+            }
+
         </div>
     );
 }

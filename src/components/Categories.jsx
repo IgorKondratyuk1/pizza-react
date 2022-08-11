@@ -2,19 +2,14 @@ import { useState } from "react";
 import CategoryItem from "./common/CategoryItem/CategoryItem";
 
 function Categories() {
-    const [activeIndex, setActiveIndex] = useState(0);
-
     const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
-
-    const onCategoryChange = (index) => {
-        setActiveIndex(index)
-    }
+    const [activeIndex, setActiveIndex] = useState(0);
 
     return (
         <div className="categories">
             <ul>
                 {categories.map((category, index) => {
-                    return <CategoryItem key={index} name={category} currentElemIndex={index} activeIndex={activeIndex} onItemChange={onCategoryChange} />
+                    return <CategoryItem key={index} name={category} currentElemIndex={index} activeIndex={activeIndex} onItemChange={setActiveIndex} />
                 })}
 
                 {/* <li className={activeIndex === 0 ? "active" : ""} onClick={(e) => { onCategoryChange(0) }}>Все</li>
