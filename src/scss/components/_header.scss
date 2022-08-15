@@ -29,4 +29,17 @@
       color: #7b7b7b;
     }
   }
+
+  @media (max-width: 640px) {
+    padding: 30px 0;
+
+    .container {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .header__cart {
+      padding: 20px;
+    }
+  }
 }

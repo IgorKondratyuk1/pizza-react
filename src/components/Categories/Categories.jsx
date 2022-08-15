@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CategoryItem from "./common/CategoryItem/CategoryItem";
+import CategoryItem from "../common/CategoryItem/CategoryItem";
 
 function Categories() {
     const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];

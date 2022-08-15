@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import CategoryItem from './common/CategoryItem/CategoryItem';
+import CategoryItem from '../common/CategoryItem/CategoryItem';
 
 function Sort() {
     const [isOpen, setIsOpen] = useState(false);

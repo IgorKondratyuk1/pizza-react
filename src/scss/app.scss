@@ -20,19 +20,64 @@ body {
   padding: 40px 0;
 
   &__title {
-    margin: 35px 0;
+    margin: 40px 0;
+    font-weight: 800;
+    font-size: 40px;
   }
 
   &__items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+
+    @media (max-width: 1400px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 1070px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 740px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
 
   &__top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .categories {
+      ul {
+        justify-content: center;
+        flex-wrap: wrap;
+        li {
+          margin-bottom: 15px;
+        }
+      }
+    }
+
+    @media (max-width: 1260px) {
+      flex-direction: column;
+
+      .categories {
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .categories {
+        ul {
+          li {
+            margin-bottom: 10px;
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -46,6 +91,10 @@ body {
     .content__title {
       margin: 0;
     }
+
+    @media (max-width: 480px) {
+      margin: 25px auto;
+    }
   }
 }
 
@@ -54,6 +103,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
   }
 
   .content__title {
@@ -75,6 +125,7 @@ body {
   }
 
   &__clear {
+    padding: 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -103,6 +154,11 @@ body {
         color: darken($color: #b6b6b6, $amount: 50);
       }
     }
+  }
+
+  .content__items {
+    display: flex;
+    flex-direction: column;
   }
 
   &__item {
@@ -274,12 +330,13 @@ body {
 
   &--empty {
     margin: 0 auto;
-    width: 560px;
+    max-width: 560px;
     text-align: center;
 
     h2 {
       font-size: 32px;
       margin-bottom: 10px;
+      line-height: 1.2;
     }
 
     p {
@@ -287,6 +344,7 @@ body {
       line-height: 145.4%;
       letter-spacing: 0.01em;
       color: #777777;
+      word-break: break-word;
     }
 
     icon {
@@ -306,6 +364,19 @@ body {
       margin: 0 auto;
       font-weight: 600;
       font-size: 18px;
+    }
+
+    @media (max-width: 780px) {
+      img {
+        width: 240px;
+        margin: 10px auto;
+      }
+    }
+
+    @media (max-width: 580px) {
+      img {
+        width: 140px;
+      }
     }
   }
 }

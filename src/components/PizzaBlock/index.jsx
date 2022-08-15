@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CategoryItem from "./common/CategoryItem/CategoryItem";
+import CategoryItem from "../common/CategoryItem/CategoryItem";
 
 function PizzaBlock({ title, imageUrl, types, sizes, price, category, rating }) {
     const typeName = ["Тонке", "Традиційне"];
@@ -22,12 +22,12 @@ function PizzaBlock({ title, imageUrl, types, sizes, price, category, rating }) 
             <div className="pizza-block__selector">
                 <ul>
                     {
-                        types.map((type, i) => <CategoryItem key={i} name={typeName[type]} currentElemIndex={i} activeIndex={activeTypeIndex} onItemChange={setActiveTypeIndex} />)
+                        types.map((type, index) => <CategoryItem key={index} name={typeName[type]} currentElemIndex={index} activeIndex={activeTypeIndex} onItemChange={setActiveTypeIndex} />)
                     }
                 </ul>
                 <ul>
                     {
-                        sizes.map((size, i) => <CategoryItem key={i} name={`${size} см.`} currentElemIndex={i} activeIndex={activeSizeIndex} onItemChange={setActiveSizeIndex} />)
+                        sizes.map((size, index) => <CategoryItem key={index} name={`${size} см.`} currentElemIndex={index} activeIndex={activeSizeIndex} onItemChange={setActiveSizeIndex} />)
                     }
                 </ul>
             </div>
