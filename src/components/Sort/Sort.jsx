@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
-import CategoryItem from '../common/CategoryItem/CategoryItem';
 
-function Sort() {
+function Sort({ sortType, setSortType }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
 
-    const popupList = ['популярности', 'цене', 'алфавиту'];
-    const sortName = popupList[activeIndex];
+    const popupList = [
+        { name: 'популярности (ASC)', sortProperty: 'rating' },
+        { name: 'популярности (DESC)', sortProperty: '-rating' },
+        { name: 'цене (ASC)', sortProperty: 'price' },
+        { name: 'цене (DESC)', sortProperty: '-price' },
+        { name: 'алфавиту (ASC)', sortProperty: 'title' },
+        { name: 'алфавиту (DESC)', sortProperty: '-title' }
+    ];
 
-    const onPopupItemClick = (index) => {
-        setActiveIndex(index);
+    const onPopupItemClick = (obj) => {
+        setSortType(obj);
         setIsOpen(false);
     }
 
@@ -29,15 +33,15 @@ function Sort() {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => { setIsOpen(!isOpen) }}>{sortName}</span>
+                <span onClick={() => { setIsOpen(!isOpen) }}>{sortType.name}</span>
             </div>
             {
                 isOpen &&
                 <div className="sort__popup">
                     <ul>
                         {
-                            popupList.map((value, i) => {
-                                return <CategoryItem key={i} name={value} currentElemIndex={i} activeIndex={activeIndex} onItemChange={onPopupItemClick} />
+                            popupList.map((obj, currentSortIndex) => {
+                                return <li key={currentSortIndex} className={currentSortIndex === sortType ? "active" : ""} onClick={() => { onPopupItemClick(obj) }}>{obj.name}</li>
                             })
                         }
                     </ul>

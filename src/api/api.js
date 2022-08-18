@@ -5,8 +5,8 @@ let instance = axios.create({
 });
 
 export const pizzaAPI = {
-    async getPizzas() {
-        return instance.get('items')
+    async getPizzas(params) {
+        return instance.get(`items?${params}`)
             .then(response => response.data)
     }
 }

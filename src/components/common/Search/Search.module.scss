@@ -1,0 +1,36 @@
+.root {
+    position: relative;
+
+    .searchInput {
+        border: 1px solid  rgba(0, 0, 0, 0.3);
+        border-radius: 22px;
+        padding: 10px 35px;
+        opacity: 0.5;
+        height: 40px;
+        width: 280px;
+        font-size: 16px;
+    }
+
+    .searchIcon {
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        opacity: 0.7;
+        left: 9px;
+        top: 8px;
+    }
+
+    .deleteIcon {
+        position: absolute;
+        width: 38px;
+        opacity: 0.4;
+        right: 0px;
+        top: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+    }
+
+    .deleteIcon:active {
+        opacity: 1;
+    }
+}
