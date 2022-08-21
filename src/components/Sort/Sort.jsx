@@ -1,19 +1,23 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setSort } from "../../redux/slices/filterSlice";
 
-function Sort({ sortType, setSortType }) {
+const popupList = [
+    { name: 'популярности (ASC)', sortProperty: 'rating' },
+    { name: 'популярности (DESC)', sortProperty: '-rating' },
+    { name: 'цене (ASC)', sortProperty: 'price' },
+    { name: 'цене (DESC)', sortProperty: '-price' },
+    { name: 'алфавиту (ASC)', sortProperty: 'title' },
+    { name: 'алфавиту (DESC)', sortProperty: '-title' }
+];
+
+function Sort() {
     const [isOpen, setIsOpen] = useState(false);
-
-    const popupList = [
-        { name: 'популярности (ASC)', sortProperty: 'rating' },
-        { name: 'популярности (DESC)', sortProperty: '-rating' },
-        { name: 'цене (ASC)', sortProperty: 'price' },
-        { name: 'цене (DESC)', sortProperty: '-price' },
-        { name: 'алфавиту (ASC)', sortProperty: 'title' },
-        { name: 'алфавиту (DESC)', sortProperty: '-title' }
-    ];
+    const sort = useSelector((state) => state.filter.sort);
+    const dispatch = useDispatch();
 
     const onPopupItemClick = (obj) => {
-        setSortType(obj);
+        dispatch(setSort(obj));
         setIsOpen(false);
     }
 
@@ -33,7 +37,7 @@ function Sort({ sortType, setSortType }) {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => { setIsOpen(!isOpen) }}>{sortType.name}</span>
+                <span onClick={() => { setIsOpen(!isOpen) }}>{sort.name}</span>
             </div>
             {
                 isOpen &&
@@ -41,7 +45,7 @@ function Sort({ sortType, setSortType }) {
                     <ul>
                         {
                             popupList.map((obj, currentSortIndex) => {
-                                return <li key={currentSortIndex} className={currentSortIndex === sortType ? "active" : ""} onClick={() => { onPopupItemClick(obj) }}>{obj.name}</li>
+                                return <li key={currentSortIndex} className={currentSortIndex === sort ? "active" : ""} onClick={() => { onPopupItemClick(obj) }}>{obj.name}</li>
                             })
                         }
                     </ul>
