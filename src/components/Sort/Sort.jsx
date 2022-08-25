@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setSort } from "../../redux/slices/filterSlice";
 
-const popupList = [
+export const sortList = [
     { name: 'популярности (ASC)', sortProperty: 'rating' },
     { name: 'популярности (DESC)', sortProperty: '-rating' },
     { name: 'цене (ASC)', sortProperty: 'price' },
@@ -44,7 +44,7 @@ function Sort() {
                 <div className="sort__popup">
                     <ul>
                         {
-                            popupList.map((obj, currentSortIndex) => {
+                            sortList.map((obj, currentSortIndex) => {
                                 return <li key={currentSortIndex} className={currentSortIndex === sort ? "active" : ""} onClick={() => { onPopupItemClick(obj) }}>{obj.name}</li>
                             })
                         }
