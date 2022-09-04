@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import Categories from '../components/Categories/Categories';
 import Sort, { sortList } from '../components/Sort/Sort';
-import PizzaBlock from '../components/PizzaBlock';
+import PizzaBlock from '../components/PizzaBlock/PizzasBlock';
 import PizzaSkeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/common/Pagination/Pagination';
 import { pizzaAPI } from '../api/api';
@@ -19,8 +19,9 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
     // redux
     const { categoryId, sort, currentPage, searchValue } = useSelector((state) => state.filter);
+    // const pizzas = useSelector((state) => state.cart.items);
 
-    const fetchPizzas = () => {
+    const fetchPizzas = async () => {
         const getParams = () => {
             const sortType = sort.sortProperty.includes('-') ? `${sort.sortProperty.replace('-', '')}&order=desc` : `${sort.sortProperty}&order=asc`;
             const categoryType = categoryId > 0 ? `&category=${categoryId}` : '';
@@ -37,11 +38,9 @@ const Home = () => {
             return await response;
         }
 
-        fetchData()
-            .then(data => {
-                setItems(data);
-                setIsLoading(false);
-            })
+        let data = await fetchData();
+        setItems(data);
+        setIsLoading(false);
     }
 
     // If params changed and was first render
@@ -83,7 +82,7 @@ const Home = () => {
 
 
 
-    const pizzasSkeletons = [...new Array(4)].map((item, index) => <PizzaSkeleton key={index} />);
+    const pizzasSkeletons = [...new Array(4)].map((_, index) => <PizzaSkeleton key={index} />);
     const filteredPizzas = items.filter(item => item.title.toLowerCase()
         .includes(searchValue.toLowerCase()))
         .map(pizza => <PizzaBlock key={pizza.id} {...pizza} />

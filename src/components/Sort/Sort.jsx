@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setSort } from "../../redux/slices/filterSlice";
 
@@ -15,14 +15,28 @@ function Sort() {
     const [isOpen, setIsOpen] = useState(false);
     const sort = useSelector((state) => state.filter.sort);
     const dispatch = useDispatch();
+    const sortRef = useRef();
 
     const onPopupItemClick = (obj) => {
         dispatch(setSort(obj));
         setIsOpen(false);
     }
 
+    // Event to Hide Sort modal when user click outside of it
+    useEffect(() => {
+        const hideModal = (event) => {
+            if (!event.path.includes(sortRef.current)) {
+                setIsOpen(false);
+            }
+        }
+
+        document.body.addEventListener('click', hideModal);
+
+        return () => { document.body.removeEventListener('click', hideModal) }
+    }, []);
+
     return (
-        <div className="sort">
+        <div className="sort" ref={sortRef}>
             <div className="sort__label">
                 <svg
                     width="10"
@@ -45,7 +59,7 @@ function Sort() {
                     <ul>
                         {
                             sortList.map((obj, currentSortIndex) => {
-                                return <li key={currentSortIndex} className={currentSortIndex === sort ? "active" : ""} onClick={() => { onPopupItemClick(obj) }}>{obj.name}</li>
+                                return <li key={currentSortIndex} className={obj === sort ? "active" : ""} onClick={() => { onPopupItemClick(obj) }}>{obj.name}</li>
                             })
                         }
                     </ul>

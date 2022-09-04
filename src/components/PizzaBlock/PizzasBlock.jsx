@@ -1,15 +1,31 @@
 import { useState } from "react";
 import CategoryItem from "../common/CategoryItem/CategoryItem";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../../redux/slices/cartSlice";
 
-function PizzaBlock({ title, imageUrl, types, sizes, price, category, rating }) {
-    const typeName = ["Тонке", "Традиційне"];
-    const [pizzaCount, setPizzaCount] = useState(0);
+export const typeNames = ["Тонке", "Традиційне"];
+
+function PizzaBlock({ id, title, imageUrl, types, sizes, price }) {
+    const dispatch = useDispatch();
+    const { items } = useSelector(state => state.cart);
     const [activeTypeIndex, setActiveTypeIndex] = useState(0);
     const [activeSizeIndex, setActiveSizeIndex] = useState(0);
 
-    const onAddPizza = () => {
-        setPizzaCount(pizzaCount + 1);
+    const totalItems = items.reduce((total, item) => { return item.id === id ? total + item.count : total }, 0);
+
+    const onAddToCart = () => {
+        const obj = {
+            id,
+            title,
+            imageUrl,
+            price,
+            type: typeNames[activeTypeIndex],
+            size: sizes[activeSizeIndex]
+        };
+
+        dispatch(addItem(obj));
     }
+
 
     return (
         <div className="pizza-block">
@@ -22,7 +38,7 @@ function PizzaBlock({ title, imageUrl, types, sizes, price, category, rating }) 
             <div className="pizza-block__selector">
                 <ul>
                     {
-                        types.map((type, index) => <CategoryItem key={index} name={typeName[type]} currentElemIndex={index} activeIndex={activeTypeIndex} onItemChange={setActiveTypeIndex} />)
+                        types.map((type, index) => <CategoryItem key={index} name={typeNames[type]} currentElemIndex={index} activeIndex={activeTypeIndex} onItemChange={setActiveTypeIndex} />)
                     }
                 </ul>
                 <ul>
@@ -33,7 +49,7 @@ function PizzaBlock({ title, imageUrl, types, sizes, price, category, rating }) 
             </div>
             <div className="pizza-block__bottom">
                 <div className="pizza-block__price">{price} $</div>
-                <button className="button button--outline button--add" onClick={onAddPizza}>
+                <button className="button button--outline button--add" onClick={onAddToCart}>
                     <svg
                         width="12"
                         height="12"
@@ -47,7 +63,10 @@ function PizzaBlock({ title, imageUrl, types, sizes, price, category, rating }) 
                         />
                     </svg>
                     <span>Добавить</span>
-                    <i>{pizzaCount}</i>
+                    {
+                        totalItems > 0 && <i>{totalItems}</i>
+                    }
+
                 </button>
             </div>
         </div>
