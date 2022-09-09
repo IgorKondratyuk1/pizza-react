@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import Categories from '../components/Categories/Categories';
@@ -6,22 +6,21 @@ import Sort, { sortList } from '../components/Sort/Sort';
 import PizzaBlock from '../components/PizzaBlock/PizzasBlock';
 import PizzaSkeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/common/Pagination/Pagination';
-import { pizzaAPI } from '../api/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { setPage, setFilters } from '../redux/slices/filterSlice';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isSearch = useRef(false);
     const isMounted = useRef(false);
-    const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    // redux
-    const { categoryId, sort, currentPage, searchValue } = useSelector((state) => state.filter);
-    // const pizzas = useSelector((state) => state.cart.items);
 
-    const fetchPizzas = async () => {
+    const { items, status } = useSelector((state) => state.pizza);
+    const { categoryId, sort, currentPage, searchValue } = useSelector((state) => state.filter);
+
+
+    const getPizzas = async () => {
         const getParams = () => {
             const sortType = sort.sortProperty.includes('-') ? `${sort.sortProperty.replace('-', '')}&order=desc` : `${sort.sortProperty}&order=asc`;
             const categoryType = categoryId > 0 ? `&category=${categoryId}` : '';
@@ -31,16 +30,8 @@ const Home = () => {
             return `sortBy=${sortType}${categoryType}${search}${page}`;
         }
 
-        async function fetchData() {
-            setIsLoading(true);
-            const params = getParams();
-            const response = await pizzaAPI.getPizzas(params);
-            return await response;
-        }
-
-        let data = await fetchData();
-        setItems(data);
-        setIsLoading(false);
+        const params = getParams();
+        dispatch(fetchPizzas(params)); // Call asyncThunk
     }
 
     // If params changed and was first render
@@ -73,14 +64,11 @@ const Home = () => {
         window.scrollTo(0, 0);
 
         if (!isSearch.current) {
-            fetchPizzas();
+            getPizzas();
         }
-
         isSearch.current = false;
 
     }, [sort, categoryId, searchValue, currentPage]);
-
-
 
     const pizzasSkeletons = [...new Array(4)].map((_, index) => <PizzaSkeleton key={index} />);
     const filteredPizzas = items.filter(item => item.title.toLowerCase()
@@ -95,13 +83,21 @@ const Home = () => {
                 <Sort />
             </div>
             <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">
-                {
-                    isLoading
-                        ? pizzasSkeletons
-                        : filteredPizzas
-                }
-            </div>
+            {
+                status === "error"
+                    ? (
+                        <div className='content__error-info'>
+                            <h2>Произошла ошибка 😕</h2>
+                            <p>К сожалению, не удалось получить пиццы. Повторите попытку позже.</p>
+                        </div>
+                    )
+                    : (
+                        <div className="content__items">
+                            {status === "loading" ? pizzasSkeletons : filteredPizzas}
+                        </div>
+                    )
+
+            }
             <Pagination onPageChange={(pageNumber) => dispatch(setPage(pageNumber))} />
         </div>
     )
